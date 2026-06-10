@@ -9,4 +9,4 @@ FROM alpine:3.14
 WORKDIR /app
 COPY --from=builder /app/auth .
 EXPOSE 6969
-CMD ["./auth-service"]
+CMD ["./auth"]
