@@ -3,10 +3,10 @@ WORKDIR /app
 COPY go.mod .
 RUN go mod tidy
 COPY . .
-RUN GOOS=linux GOARCH=amd64 go build -o auth-service main.go
+RUN GOOS=linux GOARCH=amd64 go build -o auth main.go
 
 FROM alpine:3.14
 WORKDIR /app
-COPY --from=builder /app/auth-service .
+COPY --from=builder /app/auth .
 EXPOSE 6969
 CMD ["./auth-service"]

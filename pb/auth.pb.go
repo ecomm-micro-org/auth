@@ -7,6 +7,7 @@
 package pb
 
 import (
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -632,7 +633,7 @@ var File_auth_proto protoreflect.FileDescriptor
 const file_auth_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"auth.proto\x12\x04auth\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa1\x01\n" +
+	"auth.proto\x12\x04auth\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa1\x01\n" +
 	"\rSigninRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
@@ -686,13 +687,13 @@ const file_auth_proto_rawDesc = "" +
 	"\x17access_token_expires_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x14accessTokenExpiresAt\"5\n" +
 	"\x14RevokeSessionReqeust\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId2\xc3\x02\n" +
-	"\vAuthService\x123\n" +
-	"\x06Signin\x12\x13.auth.SigninRequest\x1a\x14.auth.SigninResponse\x120\n" +
-	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x125\n" +
-	"\x06Logout\x12\x13.auth.LogoutRequest\x1a\x16.google.protobuf.Empty\x12Q\n" +
-	"\x10RenewAccessToken\x12\x1d.auth.RenewAccessTokenRequest\x1a\x1e.auth.RenewAccessTokenResponse\x12C\n" +
-	"\rRevokeSession\x12\x1a.auth.RevokeSessionReqeust\x1a\x16.google.protobuf.EmptyB\aZ\x05../pbb\x06proto3"
+	"session_id\x18\x01 \x01(\tR\tsessionId2\xba\x03\n" +
+	"\vAuthService\x12G\n" +
+	"\x06Signin\x12\x13.auth.SigninRequest\x1a\x14.auth.SigninResponse\"\x12\x82\xd3\xe4\x93\x02\f:\x01*\"\a/signin\x12C\n" +
+	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\"\x11\x82\xd3\xe4\x93\x02\v:\x01*\"\x06/login\x12I\n" +
+	"\x06Logout\x12\x13.auth.LogoutRequest\x1a\x16.google.protobuf.Empty\"\x12\x82\xd3\xe4\x93\x02\f:\x01*\"\a/logout\x12q\n" +
+	"\x10RenewAccessToken\x12\x1d.auth.RenewAccessTokenRequest\x1a\x1e.auth.RenewAccessTokenResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/renew-access-token\x12_\n" +
+	"\rRevokeSession\x12\x1a.auth.RevokeSessionReqeust\x1a\x16.google.protobuf.Empty\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/revoke-sessionB\aZ\x05../pbb\x06proto3"
 
 var (
 	file_auth_proto_rawDescOnce sync.Once

@@ -9,6 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+const testIssuer = "test-issuer"
+
 func TestNewUserClaims(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -44,7 +46,7 @@ func TestNewUserClaims(t *testing.T) {
 			duration:    time.Hour,
 			expectError: false,
 			validate: func(t *testing.T, claims *UserClaims) {
-				other, err := NewUserClaims(uuid.New(), "other@example.com", "admin", time.Hour)
+				other, err := NewUserClaims(uuid.New(), "other@example.com", "admin", testIssuer, time.Hour)
 				require.NoError(t, err)
 				assert.NotEqual(t, claims.RegisteredClaims.ID, other.RegisteredClaims.ID,
 					"two calls should produce distinct JWT IDs")
@@ -98,7 +100,7 @@ func TestNewUserClaims(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			claims, err := NewUserClaims(tt.id, tt.email, tt.role, tt.duration)
+			claims, err := NewUserClaims(tt.id, tt.email, tt.role, testIssuer, tt.duration)
 
 			if tt.expectError {
 				require.Error(t, err)
@@ -162,7 +164,7 @@ func TestCreateToken(t *testing.T) {
 			duration:    time.Hour,
 			expectError: false,
 			validate: func(t *testing.T, tokenStr string, claims *UserClaims) {
-				maker := NewJWTMaker(validSecret)
+				maker := NewJWTMaker(validSecret, testIssuer)
 				other, _, err := maker.CreateToken(uuid.New(), "other@example.com", "customer", time.Hour)
 				require.NoError(t, err)
 				assert.NotEqual(t, tokenStr, other, "distinct calls should produce distinct tokens")
@@ -203,7 +205,7 @@ func TestCreateToken(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			maker := NewJWTMaker(tt.secretKey)
+			maker := NewJWTMaker(tt.secretKey, testIssuer)
 			tokenStr, claims, err := maker.CreateToken(tt.id, tt.email, tt.role, tt.duration)
 
 			if tt.expectError {
@@ -241,7 +243,7 @@ func TestVerifyToken(t *testing.T) {
 		{
 			name: "verifies a valid token and returns correct claims",
 			buildToken: func(t *testing.T) string {
-				tok, _ := mintToken(t, NewJWTMaker(validSecret), 15*time.Minute)
+				tok, _ := mintToken(t, NewJWTMaker(validSecret, testIssuer), 15*time.Minute)
 				return tok
 			},
 			verifyWith:  validSecret,
@@ -273,7 +275,7 @@ func TestVerifyToken(t *testing.T) {
 		{
 			name: "returns error when token is signed with a different secret",
 			buildToken: func(t *testing.T) string {
-				tok, _ := mintToken(t, NewJWTMaker(otherSecret), 15*time.Minute)
+				tok, _ := mintToken(t, NewJWTMaker(otherSecret, testIssuer), 15*time.Minute)
 				return tok
 			},
 			verifyWith:  validSecret,
@@ -283,7 +285,7 @@ func TestVerifyToken(t *testing.T) {
 			name: "returns error for an expired token",
 			buildToken: func(t *testing.T) string {
 				// mint with a negative duration so it expires immediately
-				tok, _ := mintToken(t, NewJWTMaker(validSecret), -1*time.Second)
+				tok, _ := mintToken(t, NewJWTMaker(validSecret, testIssuer), -1*time.Second)
 				return tok
 			},
 			verifyWith:  validSecret,
@@ -300,7 +302,7 @@ func TestVerifyToken(t *testing.T) {
 		{
 			name: "round-trip: token created then immediately verified preserves all claims",
 			buildToken: func(t *testing.T) string {
-				tok, _ := mintToken(t, NewJWTMaker(validSecret), time.Hour)
+				tok, _ := mintToken(t, NewJWTMaker(validSecret, testIssuer), time.Hour)
 				return tok
 			},
 			verifyWith:  validSecret,
@@ -326,7 +328,7 @@ func TestVerifyToken(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tokenStr := tt.buildToken(t)
-			maker := NewJWTMaker(tt.verifyWith)
+			maker := NewJWTMaker(tt.verifyWith, testIssuer)
 			claims, err := maker.VerifyToken(tokenStr)
 
 			if tt.expectError {

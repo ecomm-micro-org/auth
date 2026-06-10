@@ -23,7 +23,7 @@ Dockerfile
 *.log
 
 # Build artifacts
-auth-service
+auth
 
 # Docs & misc
 *.md
