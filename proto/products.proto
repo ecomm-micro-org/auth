@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package products;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "orders.proto";
+
+option go_package = "../pb";
+
+message Product {
+  uint64 id = 1;
+  string name = 2;
+  double original_price = 3;
+  double price = 4;
+  string image = 5;
+  string category = 6;
+  string description = 7;
+  uint64 rating = 8;
+  uint64 reviews = 9;
+  uint64 stock = 10;
+  bool in_stock = 11;
+  repeated string tags = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
+  google.protobuf.Timestamp deleted_at = 15;
+}
+
+message GetProductByIDResponse {
+  uint64 id = 1;
+  string name = 2;
+  double original_price = 3;
+  double price = 4;
+  string image = 5;
+  string category = 6;
+  string description = 7;
+  uint64 rating = 8;
+  uint64 reviews = 9;
+  uint64 stock = 10;
+  bool in_stock = 11;
+  repeated string tags = 12;
+}
+
+message GetProductsByIDsRequest {
+  repeated uint64 product_ids = 1;
+}
+
+message GetProductsByIDsResponse {
+  repeated ProductResponse products = 1;
+}
+
+message ProductResponse {
+  uint64 id = 1;
+  string name = 2;
+  double original_price = 3;
+  double price = 4;
+  string image = 5;
+  string category = 6;
+  string description = 7;
+  uint64 rating = 8;
+  uint64 reviews = 9;
+  uint64 stock = 10;
+  bool in_stock = 11;
+  repeated string tags = 12;
+}
+
+message AddProductRequest {
+  string name = 1;
+  double original_price = 2;
+  string image = 3;
+  string category = 4;
+  string description = 5;
+  uint64 stock = 6;
+  bool in_stock = 7;
+  repeated string tags = 8;
+}
+
+message AddProductResponse {
+  uint64 id = 1;
+  string name = 2;
+  double original_price = 3;
+  double price = 4;
+  string image = 5;
+  string category = 6;
+  string description = 7;
+  uint64 rating = 8;
+  uint64 reviews = 9;
+  uint64 stock = 10;
+  bool in_stock = 11;
+  repeated string tags = 12;
+}
+
+message CalculateTotalPriceRequest {
+  repeated orders.OrderItem order_items = 1;
+}
+
+message CalculateTotalPriceResponse {
+  double total_price = 1;
+}
+
+message UpdateProductRequest {
+  uint64 id = 1;
+  string name = 2;
+  double original_price = 3;
+  double price = 4;
+  string image = 5;
+  string category = 6;
+  string description = 7;
+  uint64 stock = 10;
+  bool in_stock = 11;
+  repeated string tags = 12;
+}
+
+message DeleteProductRequest {
+  uint64 id = 1;
+}
+
+service ProductsService {
+  rpc GetProductByID(google.protobuf.Empty) returns (GetProductByIDResponse);
+  rpc GetProductsByIDs(GetProductsByIDsRequest) returns (GetProductsByIDsResponse) {
+    option (google.api.http) = {get: "/products"};
+  }
+  rpc AddProduct(AddProductRequest) returns (AddProductResponse);
+  rpc CalculateTotalPrice(CalculateTotalPriceRequest) returns (CalculateTotalPriceResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (google.protobuf.Empty);
+  rpc DeleteProduct(DeleteProductRequest) returns (google.protobuf.Empty);
+}

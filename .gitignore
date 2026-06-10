@@ -1,0 +1,40 @@
+# Binaries
+auth-service
+*.exe
+*.out
+
+# Test & coverage
+*.test
+*.cover
+coverage.out
+coverage.html
+
+# Go workspace
+vendor/
+go.work
+go.work.sum
+
+# Environment & secrets
+.env
+.env.*
+
+# Shell scripts
+*.sh
+
+# Logs
+*.log
+
+# Editor & IDE
+.zed
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+obsolete/
+tmp/
